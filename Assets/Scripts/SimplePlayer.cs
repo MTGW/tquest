@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿	using UnityEngine;
 using System.Collections;
 
 public class SimplePlayer : MonoBehaviour {
@@ -17,7 +17,7 @@ public class SimplePlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		bool h = Input.GetButton ("Horizontal");
-		bool v = Input.GetButton("Jump");
+		bool v = Input.GetButtonDown("Jump");
 		bool atk = Input.GetButton ("Fire1");
 		currentPosition = transform.position;
 
