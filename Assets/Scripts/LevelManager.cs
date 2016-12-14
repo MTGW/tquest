@@ -13,28 +13,21 @@ public class LevelManager : MonoBehaviour {
 	private Text lives;
 
 	Player player;
-
     private Transform playerObj;
-
-
     private Transform camPosition; 
 
-
-	void Start () {
+	void Start() {
+        
 		setStats (); 
-
 		player = Player.get_Instance();
-
         camPosition = GetComponent<Transform>();
-
         playerObj = GameObject.FindGameObjectWithTag("Player").transform;
-
 	}
 
 
 	void Update () {
+        
 		setStats ();
-
         setCamPos( getPlayerLocation() );
 	}
 
@@ -49,13 +42,13 @@ public class LevelManager : MonoBehaviour {
 
 
 
-    public Vector3 getPlayerLocation()
-    {
+    public Vector3 getPlayerLocation() {
+        
         return new Vector3(playerObj.position.x, playerObj.position.y, (float)-10 );
     }
 
-    public void setCamPos( Vector3 playerPos )
-    {
+    public void setCamPos( Vector3 playerPos ) {
+        
         camPosition.position = playerPos;
     }
 

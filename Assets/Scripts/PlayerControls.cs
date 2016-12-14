@@ -5,27 +5,22 @@ using UnityEngine.SceneManagement;
 public class PlayerControls : MonoBehaviour {
 
     [SerializeField]
-    private int playerRecievedDamage = 10;
-    [SerializeField]
-    private GameObject coin; 
+    private int playerRecievedDamage = 1;
 	[SerializeField]
 	private float speed;
 
-
     Transform tr;
     Rigidbody2D rb; 
+    float noDamageTime;
 
-
-	// Use this for initialization
-	void Start () {
+    void Start () {
 
         tr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>(); 
 
 	}
 	
-	// Update is called once per frame
-	void Update () {
+    void Update() {
 
 		transform.Translate (Vector3.right * speed * Input.GetAxisRaw ("Horizontal")); 
 
@@ -34,8 +29,6 @@ public class PlayerControls : MonoBehaviour {
 				rb.AddForce (new Vector2 ((float)0, (float)300));
 			}
 		}
-
-
 	}
 
 
@@ -45,60 +38,38 @@ public class PlayerControls : MonoBehaviour {
 		switch (other.tag)
         {
             case "Enemy":
-
-                Animator playerAnimator = other.gameObject.GetComponent<Animator>();
-
-                if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("attack") ||
-                   playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("jumpAtk"))
-                {
-                    Destroy(gameObject);
-					Instantiate(coin, gameObject.transform);
-                }
-                else
-                {
+                if(noDamageTime < Time.time) {
                     Player.get_Instance().setHealth(Player.get_Instance().getHealth() - playerRecievedDamage);
+                    noDamageTime = Time.time + 4;
                 }
-
-                
-
-                break;
+                    break;
 
             case "deathFloor":
-
-                Player.get_Instance().setHealth(0);
-
+                Player.get_Instance().setHealth(-2);
                 tr.position = new Vector2((float)-43.4, (float)-2.7) ;
-
                 break;
 
             case "Coin":
-
                 Player.get_Instance().collectCoin();
-
-			Destroy(other.gameObject);
-
+                Destroy(other.gameObject);
                 break;
 
             case "Door":
-
                 SceneManager.LoadScene("lvl2");
-
                 break;
 
             case "Prize":
-
                 SceneManager.LoadScene("WinScreen");
-
                 break;
         }
 
     } 
 
 
-	void OnTriggerStay2D(Collider2D other){
-
-		OnTriggerEnter2D (other);
-	}
-    
+//	void OnTriggerStay2D(Collider2D other){
+//
+//		OnTriggerEnter2D (other);
+//	}
+//    
 
 }

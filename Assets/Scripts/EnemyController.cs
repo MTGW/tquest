@@ -1,62 +1,55 @@
-<<<<<<< HEAD
 ﻿using UnityEngine;
 using System.Collections;
 
 public class EnemyController : MonoBehaviour {
 
-    [SerializeField]
-    int damage;
+	[SerializeField]
+	float speed;
+	[SerializeField]
+	GameObject player;
 
-    void OnTriggerEnter2D(Collider2D other){
+	bool isAlive;
+    Renderer rendererObj;
+	SpriteRenderer spriteRenderer;
 
-        if(other.gameObject.tag == "Player") {
-            Animator playerAnimator = other.gameObject.GetComponent<Animator>();
-			if(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("attack") ||
-				playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("jumpAtk")){
-                Destroy(gameObject);
-            } else {
-                Player.get_Instance().setHealth(Player.get_Instance().getHealth() - damage);
-            }
-        }
-    }
-    // Just in case OnTriggerEnter2D() doesn't invoke on enter.
-    void OnTriggerStay2D(Collider2D other){
+    void Awake() {
 
-        OnTriggerEnter2D(other);
+        isAlive = true;
+        rendererObj = GetComponent<Renderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        Debug.Log("Init Health: " + Player.get_Instance().getHealth());
     }
 
-}
-=======
-﻿using UnityEngine;
-using System.Collections;
+    void OnBecameVisible() {
 
-public class EnemyController : MonoBehaviour {
-
-    [SerializeField]
-    float speed;
-
-    GameObject player;
-    bool alive;
-
-    void Start(){
-
-        StartCoroutine("move");
-        player = GameObject.Find("Player");
-        alive = true;
-
-
-    }
-
-    IEnumerator move(){
+		StartCoroutine ("move");
+	}
+    void OnBecomeInvisible(){
     
-        while(alive) {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down);
+        StopCoroutine("move");
+    }
 
-            if(hit != null) {
-                Vector2.Lerp(transform.position, player.transform.position, speed);
-            }
+	IEnumerator move() {
+
+        while(isAlive && 
+                Vector2.Distance(transform.position, player.transform.position) > 1f){
+			RaycastHit2D hit = Physics2D.Raycast (
+				new Vector2(transform.position.x - 1f, transform.position.y),
+				Vector2.down, 
+                rendererObj.bounds.size.y / 2 + 1.5f
+            );
+            Debug.Log(hit.collider);
+            if(hit.collider != null && hit.collider.tag != "enemy") {
+                transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed);
+                if(transform.position.x > player.transform.position.x) {
+                    spriteRenderer.flipX = true;
+                }
+                else {
+                    spriteRenderer.flipX = false;
+                }
+
+            }      
             yield return null;
         }
     }
 }
->>>>>>> master

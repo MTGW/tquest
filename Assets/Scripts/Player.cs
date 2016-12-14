@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Player{
 
@@ -8,56 +9,61 @@ public class Player{
 	private static Player _instance;
 	private bool dead;
 
-	public static Player get_Instance(){
-		if (_instance == null) { 
+	public static Player get_Instance() {
+        
+		if(_instance == null) { 
 			_instance = new Player (); 
+			_instance.score = 0;
+			_instance.health = 2;
+			_instance.highScore = 0;
+			_instance.lives = 3;
 		}
 		return _instance; 
 	}
 
-	// delete constructor. Only using to stop Null Exceptions
-	private Player(){
-		score = 0;
-		health = 100;
-		highScore = 0;
-		lives = 3;
+	private Player() {
+
 	}
-	public int getScore(){ 
-		return this.score; 
+	public int getScore() { 
+		return score; 
 	}
-	public void setScore (int score){ 
+	public void setScore (int score) { 
 		this.score = score; 
 	}
 
-	public int getHealth(){ 
-		return this.health;
+	public int getHealth() { 
+		return health;
 	}
-	public void setHealth(int health){ 
+	public void setHealth(int health) { 
 		this.health = health; 
-		if (health < 0) {
-			lives--;
+		if (health <= 0) {
+			this.health = 0;
+			setLives(this.lives - 1);
 		}
+        Debug.Log("Health: " + health);
 	} 
 
-	public int getLives(){ 
-		return this.lives; 
+	public int getLives() { 
+		return lives; 
 	}
-	public void setLives(int lives){ 
+	public void setLives(int lives) { 
 		this.lives = lives; 
-		if (lives < 0) {
-			// some game over shit here
-		}
+		if (lives <= 0) {
+			this.lives = 0;
+			SceneManager.LoadScene ("start");
+        }
+			health = 2;
 	}
 
-	public int getHighScore(){ 
-		return this.highScore; 
+	public int getHighScore() { 
+		return highScore; 
 	}
-	public void getHeighScore(int highScore){ 
+	public void getHeighScore(int highScore) { 
 		this.highScore = highScore;
 	}
 
 
-	public void collectCoin(){ 
+	public void collectCoin() { 
 		this.score++; 
 	}
 
