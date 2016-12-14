@@ -55,4 +55,10 @@ public class Player{
 	public void getHeighScore(int highScore){ 
 		this.highScore = highScore;
 	}
+
+
+	public void collectCoin(){ 
+		this.score++; 
+	}
+
 }
