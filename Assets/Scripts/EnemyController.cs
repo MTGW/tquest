@@ -10,8 +10,8 @@ public class EnemyController : MonoBehaviour {
 
         if(other.gameObject.tag == "Player") {
             Animator playerAnimator = other.gameObject.GetComponent<Animator>();
-            if(playerAnimator.GetCurrentAnimatorStateInfo == "attack" ||
-               playerAnimator.GetCurrentAnimatorStateInfo == "jumpAtk") {
+			if(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("attack") ||
+				playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("jumpAtk")){
                 Destroy(gameObject);
             } else {
                 Player.get_Instance().setHealth(Player.get_Instance().getHealth() - damage);
